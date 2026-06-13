@@ -1,0 +1,42 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #1a1a2e;
+  height: 100vh;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+.desktop {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.window {
+  position: absolute;
+  width: 300px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  top: 100px;
+  left: 100px;
+}
+
+.title-bar {
+  background: #16213e;
+  color: white;
+  padding: 10px;
+  border-radius: 8px 8px 0 0;
+  cursor: grab;
+  font-weight: bold;
+}
+
+.content {
+  padding: 15px;
+  color: #333;
+}
