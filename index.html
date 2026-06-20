@@ -2,78 +2,190 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SuhasOS</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="desktop">
+<div class="desktop" id="desktop">
 
-    <div class="taskbar">
-      <span class="os-name">SuhasOS</span>
-      <span id="clock"></span>
-    </div>
+  <div class="stars" id="stars"></div>
 
-    <div class="window" id="w1" style="top:80px; left:40px">
-      <div class="title-bar">
-        <span>Welcome</span>
-        <button class="close-btn" onclick="closeWindow('w1')">X</button>
-      </div>
-      <div class="content">
-        <h2>Welcome to SuhasOS!</h2>
-        <p>Drag the windows around. Built for NASA Stardance.</p>
-      </div>
-    </div>
-
-    <div class="window" id="w2" style="top:80px; left:380px">
-      <div class="title-bar">
-        <span>Notepad</span>
-        <button class="close-btn" onclick="closeWindow('w2')">X</button>
-      </div>
-      <div class="content">
-        <textarea placeholder="Type your notes here..."></textarea>
+  <div class="taskbar">
+    <div class="taskbar-left">
+      <span class="logo">SuhasOS</span>
+      <div class="taskbar-icons">
+        <button class="tb-btn" onclick="openApp('notepad')" title="Notepad">📝</button>
+        <button class="tb-btn" onclick="openApp('calc')" title="Calculator">🔢</button>
+        <button class="tb-btn" onclick="openApp('clock')" title="Clock">🕐</button>
+        <button class="tb-btn" onclick="openApp('todo')" title="To-Do">✅</button>
+        <button class="tb-btn" onclick="openApp('weather')" title="Weather">🌤</button>
+        <button class="tb-btn" onclick="openApp('colors')" title="Color Picker">🎨</button>
       </div>
     </div>
-
-    <div class="window" id="w3" style="top:320px; left:40px">
-      <div class="title-bar">
-        <span>Calculator</span>
-        <button class="close-btn" onclick="closeWindow('w3')">X</button>
-      </div>
-      <div class="content">
-        <input id="calc-display" type="text" readonly placeholder="0">
-        <div class="calc-buttons">
-          <button onclick="calcInput('7')">7</button>
-          <button onclick="calcInput('8')">8</button>
-          <button onclick="calcInput('9')">9</button>
-          <button onclick="calcInput('/')">/</button>
-          <button onclick="calcInput('4')">4</button>
-          <button onclick="calcInput('5')">5</button>
-          <button onclick="calcInput('6')">6</button>
-          <button onclick="calcInput('*')">*</button>
-          <button onclick="calcInput('1')">1</button>
-          <button onclick="calcInput('2')">2</button>
-          <button onclick="calcInput('3')">3</button>
-          <button onclick="calcInput('-')">-</button>
-          <button onclick="calcInput('0')">0</button>
-          <button onclick="calcInput('.')">.</button>
-          <button onclick="calcEqual()">=</button>
-          <button onclick="calcClear()">C</button>
-        </div>
-      </div>
+    <div class="taskbar-right">
+      <span id="battery"></span>
+      <span id="tb-clock"></span>
     </div>
-
-    <div class="window" id="w4" style="top:320px; left:380px">
-      <div class="title-bar">
-        <span>Clock</span>
-        <button class="close-btn" onclick="closeWindow('w4')">X</button>
-      </div>
-      <div class="content" style="text-align:center">
-        <div id="big-clock" style="font-size:2rem; font-weight:bold; margin:10px 0;"></div>
-        <div id="big-date" style="font-size:0.9rem; opacity:0.7;"></div>
-      </div>
-    </div>
-
   </div>
-  <script src="script.js"></script>
+
+  <div class="win" id="win-welcome" style="top:70px;left:40px;width:320px">
+    <div class="win-bar" data-win="win-welcome">
+      <span>Welcome</span>
+      <div class="win-btns">
+        <button class="wbtn min" onclick="minWin('win-welcome')"></button>
+        <button class="wbtn cls" onclick="closeWin('win-welcome')"></button>
+      </div>
+    </div>
+    <div class="win-body">
+      <p class="mono">$ whoami</p>
+      <p class="ans">SuhasOS v2.0</p>
+      <p class="mono mt">$ uptime</p>
+      <p class="ans" id="uptime-display">calculating...</p>
+      <p class="mono mt">$ motd</p>
+      <p class="ans">Welcome! Click taskbar icons to open apps. Right-click desktop for menu.</p>
+    </div>
+  </div>
+
+  <div class="win" id="win-notepad" style="top:70px;left:390px;width:340px;display:none">
+    <div class="win-bar" data-win="win-notepad">
+      <span>Notepad</span>
+      <div class="win-btns">
+        <button class="wbtn min" onclick="minWin('win-notepad')"></button>
+        <button class="wbtn cls" onclick="closeWin('win-notepad')"></button>
+      </div>
+    </div>
+    <div class="win-body" style="padding:0">
+      <div class="notepad-toolbar">
+        <button onclick="formatText('bold')">B</button>
+        <button onclick="formatText('italic')">I</button>
+        <button onclick="formatText('underline')">U</button>
+        <button onclick="clearNote()">Clear</button>
+        <button onclick="copyNote()">Copy</button>
+      </div>
+      <div id="notepad-area" contenteditable="true" class="notepad-area" placeholder="Start typing..."></div>
+    </div>
+  </div>
+
+  <div class="win" id="win-calc" style="top:70px;left:750px;width:260px;display:none">
+    <div class="win-bar" data-win="win-calc">
+      <span>Calculator</span>
+      <div class="win-btns">
+        <button class="wbtn min" onclick="minWin('win-calc')"></button>
+        <button class="wbtn cls" onclick="closeWin('win-calc')"></button>
+      </div>
+    </div>
+    <div class="win-body">
+      <div id="calc-expr" class="calc-expr"></div>
+      <div id="calc-disp" class="calc-disp">0</div>
+      <div class="calc-grid">
+        <button class="calc-btn span2" onclick="calcClear()">AC</button>
+        <button class="calc-btn op" onclick="calcIn('%')">%</button>
+        <button class="calc-btn op" onclick="calcIn('/')">÷</button>
+        <button class="calc-btn" onclick="calcIn('7')">7</button>
+        <button class="calc-btn" onclick="calcIn('8')">8</button>
+        <button class="calc-btn" onclick="calcIn('9')">9</button>
+        <button class="calc-btn op" onclick="calcIn('*')">×</button>
+        <button class="calc-btn" onclick="calcIn('4')">4</button>
+        <button class="calc-btn" onclick="calcIn('5')">5</button>
+        <button class="calc-btn" onclick="calcIn('6')">6</button>
+        <button class="calc-btn op" onclick="calcIn('-')">−</button>
+        <button class="calc-btn" onclick="calcIn('1')">1</button>
+        <button class="calc-btn" onclick="calcIn('2')">2</button>
+        <button class="calc-btn" onclick="calcIn('3')">3</button>
+        <button class="calc-btn op" onclick="calcIn('+')">+</button>
+        <button class="calc-btn span2" onclick="calcIn('0')">0</button>
+        <button class="calc-btn" onclick="calcIn('.')">.</button>
+        <button class="calc-btn eq" onclick="calcEq()">=</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="win" id="win-clock" style="top:380px;left:40px;width:280px;display:none">
+    <div class="win-bar" data-win="win-clock">
+      <span>Clock</span>
+      <div class="win-btns">
+        <button class="wbtn min" onclick="minWin('win-clock')"></button>
+        <button class="wbtn cls" onclick="closeWin('win-clock')"></button>
+      </div>
+    </div>
+    <div class="win-body" style="text-align:center;padding:20px">
+      <canvas id="clock-canvas" width="200" height="200" style="display:block;margin:0 auto"></canvas>
+      <div id="dig-time" style="font-family:'Space Mono',monospace;font-size:1.4rem;margin-top:12px;color:#00ff88"></div>
+      <div id="dig-date" style="font-size:12px;opacity:0.6;margin-top:4px"></div>
+    </div>
+  </div>
+
+  <div class="win" id="win-todo" style="top:380px;left:350px;width:300px;display:none">
+    <div class="win-bar" data-win="win-todo">
+      <span>To-Do</span>
+      <div class="win-btns">
+        <button class="wbtn min" onclick="minWin('win-todo')"></button>
+        <button class="wbtn cls" onclick="closeWin('win-todo')"></button>
+      </div>
+    </div>
+    <div class="win-body">
+      <div style="display:flex;gap:6px;margin-bottom:10px">
+        <input id="todo-in" type="text" placeholder="New task..." class="todo-input">
+        <button class="todo-add" onclick="addTodo()">+</button>
+      </div>
+      <div id="todo-stats" style="font-size:11px;color:#888;margin-bottom:8px"></div>
+      <ul id="todo-list"></ul>
+    </div>
+  </div>
+
+  <div class="win" id="win-weather" style="top:380px;left:680px;width:280px;display:none">
+    <div class="win-bar" data-win="win-weather">
+      <span>Weather</span>
+      <div class="win-btns">
+        <button class="wbtn min" onclick="minWin('win-weather')"></button>
+        <button class="wbtn cls" onclick="closeWin('win-weather')"></button>
+      </div>
+    </div>
+    <div class="win-body" style="text-align:center">
+      <div id="weather-icon" style="font-size:3rem;margin:10px 0">🌤</div>
+      <div id="weather-temp" style="font-family:'Space Mono',monospace;font-size:2rem;color:#00ff88">72°F</div>
+      <div id="weather-desc" style="font-size:13px;opacity:0.7;margin:6px 0">Partly Cloudy</div>
+      <div style="display:flex;justify-content:space-around;margin-top:14px;font-size:12px;opacity:0.6">
+        <div>💧 45%</div>
+        <div>💨 8 mph</div>
+        <div>☀️ UV 5</div>
+      </div>
+      <button onclick="refreshWeather()" style="margin-top:14px;background:rgba(0,255,136,0.1);border:1px solid #00ff88;color:#00ff88;padding:6px 16px;border-radius:4px;cursor:pointer;font-size:12px">Refresh</button>
+    </div>
+  </div>
+
+  <div class="win" id="win-colors" style="top:70px;left:390px;width:300px;display:none">
+    <div class="win-bar" data-win="win-colors">
+      <span>Color Picker</span>
+      <div class="win-btns">
+        <button class="wbtn min" onclick="minWin('win-colors')"></button>
+        <button class="wbtn cls" onclick="closeWin('win-colors')"></button>
+      </div>
+    </div>
+    <div class="win-body">
+      <input type="color" id="color-pick" value="#00ff88" style="width:100%;height:60px;border:none;cursor:pointer;background:none;border-radius:4px">
+      <div id="color-vals" style="margin-top:10px;font-family:'Space Mono',monospace;font-size:12px;line-height:2"></div>
+      <div id="color-preview" style="height:40px;border-radius:4px;margin-top:10px;background:#00ff88"></div>
+      <p style="font-size:11px;opacity:0.5;margin-top:8px">Pick a color to see HEX, RGB values</p>
+    </div>
+  </div>
+
+  <div id="ctx-menu">
+    <div class="ctx-item" onclick="openApp('notepad')">📝 Notepad</div>
+    <div class="ctx-item" onclick="openApp('calc')">🔢 Calculator</div>
+    <div class="ctx-item" onclick="openApp('clock')">🕐 Clock</div>
+    <div class="ctx-item" onclick="openApp('todo')">✅ To-Do</div>
+    <div class="ctx-item" onclick="openApp('weather')">🌤 Weather</div>
+    <div class="ctx-item" onclick="openApp('colors')">🎨 Color Picker</div>
+    <div class="ctx-sep"></div>
+    <div class="ctx-item" onclick="changeWallpaper()">🖼 Change Wallpaper</div>
+  </div>
+
+  <div id="dock"></div>
+
+</div>
+<script src="script.js"></script>
 </body>
 </html>
